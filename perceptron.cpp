@@ -86,7 +86,8 @@ int main () {
 	double rate = 0.05, max_it = 100;
 
 	Matrix ans = perceptron(max_it, rate, X, D);
-
+	
+	cout << "Matriz de pesos: " << endl;
 	ans.print();
 	
 	return 0;

@@ -208,6 +208,7 @@ double Matrix<T>::sum() {
 	}
 	return result;
 }
+
 #endif
 
 
