@@ -206,7 +206,7 @@ double Matrix<T>::sum() {
 			result += mat[i][j]*mat[i][j];
 		}
 	}
-	return result;
+	return result/(rows*cols);
 }
 
 #endif
