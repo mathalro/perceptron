@@ -28,19 +28,43 @@ X = [bias aux];
 W = zeros(size(D,2),size(X,2));
 t = 1;
 E = 1;
-max_it = 10;
+max_it = 50;
 N = size(X,1);
 X_transp = X';
 alpha = 0.1;
-E_epoca = [];
-while t < max_it && E > 0
+E_epoca = zeros(max_it,1);
+while (t < max_it) && (E > 0)
    E = 0;
    for i = 1:N
        yi = hardlim(W*X_transp(:,i));
        ei = D(i,:)' - yi;
        W = W + alpha*ei*X(i,:);
-       E = E + ei*ei';
+       E = E + ei'*ei;
+   end
+   E_epoca(t) = E;
+   t = t+1;
+end
+
+figure;
+x_axis = [1:t];
+title('Erro de treinamento');
+xlabel('iterações');
+ylabel('erro de treinamento');
+plot(x_axis,E_epoca);
+
+%{
+while (t < max_it) && (E > 0)
+   E = 0;
+   for i = 1:N
+       yi = hardlim(W*X_transp(:,i));
+       ei = D(i,:)' - yi;
+       E = E + ei'*ei;
    end
    t = t+1;
    E_epoca = [E_epoca E];
 end
+
+figure;
+x_axis = [1:t-1];
+plot(x_axis,E_epoca);
+%}
