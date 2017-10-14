@@ -51,12 +51,14 @@ for i = 2:size(X,2)
     X(:,i) = (X(:,i) - min(X(:,i)))/(max(X(:,i)) - min(X(:,i)));
 end
 
+% separando grupo de teste: 1/3 das amostras;
+NX = size(X,1);
+ND = size(D,1);
+X_teste = X(118:NX,:);
+D_teste = D(118:ND,:);
+
 % separando grupo de treinamento: 2/3 das amostras;
 X = X(1:117,:);
-
-% separando grupo de teste: 1/3 das amostras;
-X_teste = X(118:,:);
-
 % vetor de pesos sinapticos;
 W = zeros(size(D,2),size(X,2));
 % variavel de iteracao;
@@ -89,24 +91,18 @@ end
 % exibição dos resultados para o treinamento;
 figure;
 title('Erro de treinamento');
-xlabel('iterações');
+xlabel('iteracoes');
 ylabel('erro de treinamento');
 plot(E_epoca);
 
-
-
+% Verificaao de taxa de acerto
 X_transp = X_teste';
-
-while (t < max_it) && (E > 0)
-   E = 0;
-   for i = 1:N
-       yi = hardlim(W*X_transp(:,i));
-       ei = D(i,:)' - yi;
-       E = E + ei'*ei;
-   end
-   t = t+1;
-   E_epoca = [E_epoca E];
+acertos = 0;
+for i = 1:size(X_transp,2)
+  yi = hardlim(W*X_transp(:,i));
+  if D_teste(i,:)'== yi;
+    acertos++;
+  end
 end
 
-figure;
-plot(E_epoca);
+fprintf('Taxa de acerto: %.2f %%\n', 100*acertos/size(X_transp,2));
