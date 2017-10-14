@@ -26,6 +26,17 @@ for i = 1:size(M,1)
     total = [M_binary_classes M(:,2:14)];
 end
 
+% vetor de indices aleatorios;
+rand_index = randperm(size(total,1));
+
+% aleatorizacao da matriz final
+rand_total = zeros(size(total));
+for i = 1:size(total,1)
+   rand_total(i,:) = total(rand_index(i),:);
+end
+
+total = rand_total;
+
 % vetor de bias a ser inserido na matriz de entradas;
 bias = ones(size(total,1),1);
 % vetor de referencia;
@@ -40,20 +51,11 @@ for i = 2:size(X,2)
     X(:,i) = (X(:,i) - min(X(:,i)))/(max(X(:,i)) - min(X(:,i)));
 end
 
-% vetor de indices aleatorios;
-rand_index = randperm(size(X,1));
-
-% aleatorizacao da matriz X
-rand_X = zeros(size(X));
-for i = 1:size(X,1)
-   rand_X(i,:) = X(rand_index(i),:); 
-end
-
-% grupo total de amostras: treinamento+teste;
-X_total = rand_X;
-
 % separando grupo de treinamento: 2/3 das amostras;
-X = X_total(1:117,:);
+X = X(1:117,:);
+
+% separando grupo de teste: 1/3 das amostras;
+X_teste = X(118:,:);
 
 % vetor de pesos sinapticos;
 W = zeros(size(D,2),size(X,2));
@@ -62,16 +64,15 @@ t = 1;
 % variavel do erro médio quadrático das epocas;
 E = 1;
 % numero maximo de iteracoes;
-max_it = 100;
+max_it = 50;
 % numero de linhas do vetor de entradas;
 N = size(X,1);
 % matriz auxiliar com a transposta da matriz de entradas;
 X_transp = X';
 % taxa de aprendizado da rede;
-alpha = 0.2;
+alpha = 0.001;
 % vetor que armazena os erros de cada epoca;
-E_epoca = zeros(max_it);
-
+E_epoca = zeros(1,max_it);
 % loop principal de TREINAMENTO: atualizacao dos pesos, calculo do erro objetivo;
 while (t < max_it) && (E > 0)
    E = 0;
@@ -87,15 +88,15 @@ end
 
 % exibição dos resultados para o treinamento;
 figure;
-x_axis = [1:t];
 title('Erro de treinamento');
 xlabel('iterações');
 ylabel('erro de treinamento');
-plot(x_axis,E_epoca);
+plot(E_epoca);
 
-%}
 
-%{
+
+X_transp = X_teste';
+
 while (t < max_it) && (E > 0)
    E = 0;
    for i = 1:N
@@ -108,6 +109,4 @@ while (t < max_it) && (E > 0)
 end
 
 figure;
-x_axis = [1:t-1];
-plot(x_axis,E_epoca);
-%}
+plot(E_epoca);
