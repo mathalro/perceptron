@@ -44,31 +44,25 @@ end
 rand_index = randperm(size(X,1));
 
 % aleatorizacao da matriz X
-rand_X = zeros(size(X));
+
 for i = 1:size(X,1)
-   rand_X(i,:) = X(rand_index(i),:); 
+   rand_X(i,:) = X(rand_index(i)) 
 end
-
-% grupo total de amostras: treinamento+teste;
-X_total = rand_X;
-
-% separando grupo de treinamento: 2/3 das amostras;
-X = X_total(1:117,:);
 
 % vetor de pesos sinapticos;
 W = zeros(size(D,2),size(X,2));
 % variavel de iteracao;
 t = 1;
-% variavel do erro médio quadrático das epocas;
+% variavel das epocas;
 E = 1;
 % numero maximo de iteracoes;
-max_it = 100;
+max_it = 50;
 % numero de linhas do vetor de entradas;
 N = size(X,1);
 % matriz auxiliar com a transposta da matriz de entradas;
 X_transp = X';
 % taxa de aprendizado da rede;
-alpha = 0.2;
+alpha = 0.005;
 % vetor que armazena os erros de cada epoca;
 E_epoca = zeros(max_it);
 
@@ -85,14 +79,12 @@ while (t < max_it) && (E > 0)
    t = t+1;
 end
 
-% exibição dos resultados para o treinamento;
 figure;
 x_axis = [1:t];
 title('Erro de treinamento');
 xlabel('iterações');
 ylabel('erro de treinamento');
 plot(x_axis,E_epoca);
-
 %}
 
 %{
